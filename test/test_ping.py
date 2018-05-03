@@ -9,7 +9,7 @@ import ping
 listExample = [{'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy'}]
 
 @mock.patch('ingress.getIngress')
-def test_get_ingress_objects(mock_ingress_data_func):
+def test_create_enpoint_objects(mock_ingress_data_func):
     #takes in a list of ingress dicts from ingress.py
     #construct service URL(s)
     #construct host URL(s)
@@ -19,14 +19,3 @@ def test_get_ingress_objects(mock_ingress_data_func):
     urlObjects = ping.constructURL()
     assert urlObjects[0]['service'] == 'http://testem.test.svc.cluster.local'
     assert urlObjects[0]['host'] == 'https://test.io'
-
-    
-
-@mock.patch('ingress.getIngress')
-def get_ingress_objects(mock_ingress_data_func):
-    mock_ingress_data_func.return_value = listExample
-    ingressData = ingress.getIngress()
-
-    print ingressData
-
-#get_ingress_objects()

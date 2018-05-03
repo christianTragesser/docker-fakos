@@ -3,16 +3,16 @@ import sys
 import time
 import requests
 import urllib3
+import ingress
 
-
-#service_name = os.environ['SERVICE_NAME']
-#python_service_name = service_name.replace('-', '_') #convert hyphens to underscore to be python friendly
-#namespace = os.environ['NAMESPACE']
-#port = os.environ['PORT']
-#ingress_host = os.environ['URL']
-#user = os.environ['USER']
-#password = os.environ['PASS']
 
 def constructURL():
-    endpoints = [ { 'service': 'none', 'host': 'none'} ]
+    global ingress
+    endpoints = []
+    ingressData = ingress.getIngress()
+    for ingress in ingressData:
+        urls = {}
+        urls['host'] = 'https://'+ingress['host']
+        urls['service'] = 'http://'+ingress['serviceName']+'.'+ingress['namespace']+'.svc.cluster.local'
+        endpoints.append(urls)
     return endpoints
