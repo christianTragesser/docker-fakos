@@ -5,7 +5,7 @@ import json
 import time
 import os
 
-def getIngress():
+def getIngressList():
     kubeConfig = '/tmp/config'
     ingress = {}
     ingressList = []
@@ -41,4 +41,4 @@ def getIngress():
     return ingressList
 
 if __name__ == "__main__":
-    getIngress()
+    getIngressList()

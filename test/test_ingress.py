@@ -38,7 +38,7 @@ ingressSample = {
 @mock.patch('kubernetes.client.ExtensionsV1beta1Api.list_ingress_for_all_namespaces')
 def test_get_ingress_objects(mock_list_ingress_func):
     mock_list_ingress_func.return_value = json.dumps(ingressSample)
-    ingressList = ingress.getIngress()
+    ingressList = ingress.getIngressList()
     assert ingressList[0]['name'] == 'testy'
     assert ingressList[0]['namespace'] == 'test'
     assert ingressList[0]['serviceName'] == 'testem'
