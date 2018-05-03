@@ -29,11 +29,11 @@ def test_request_url_enpoints(mock_ingress_data_func):
     #return duration for host and service requests
     mock_ingress_data_func.return_value = listExample
     responses.add(responses.GET, 'https://test.io',
-                  status=200)
+                  status=404)
     responses.add(responses.GET, 'http://testem.test.svc.cluster.local',
                   status=200)
 
     request_durations = ping.measureRequests()
     assert request_durations[0]['name'] == 'testy'
     assert request_durations[0]['service_latency']
-    assert request_durations[0]['host_latency']
+    assert request_durations[0]['host_latency'] == 0
