@@ -1,10 +1,5 @@
-import os
-import sys
-import time
 import requests
-import urllib3
 import ingress
-
 
 def constructURLs():
     global ingress
@@ -19,4 +14,25 @@ def constructURLs():
     return endpoints
 
 def measureRequests():
-    return True
+    stats = []
+    urlObjects = constructURLs()
+    for service in urlObjects:
+        measurements = {}
+        measurements['name'] = service['name']
+        measurements['service_latency'] = getRequestDuration(service['service'])
+        measurements['host_latency'] = getRequestDuration(service['host'])
+        stats.append(measurements)
+    return stats
+
+def getRequestDuration(url):
+    try:
+        r = requests.get(url)
+        #if request returns non success, return 0
+        if r.status_code > 307:
+            return 0
+        else:
+            return r.elapsed.total_seconds()
+    except requests.exceptions.RequestException as e:
+        #request not able to reach service, return 0s response time
+        print e
+        return 0

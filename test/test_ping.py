@@ -1,4 +1,5 @@
 import pytest
+import responses
 import sys
 import os
 import mock
@@ -19,3 +20,20 @@ def test_create_endpoint_objects(mock_ingress_data_func):
     assert urlObjects[0]['name'] == 'testy'
     assert urlObjects[0]['service'] == 'http://testem.test.svc.cluster.local'
     assert urlObjects[0]['host'] == 'https://test.io'
+
+@responses.activate
+@mock.patch('ingress.getIngressList')
+def test_request_url_enpoints(mock_ingress_data_func):
+    #takes in list of URL dicts
+    #perform http/https request against URL
+    #return duration for host and service requests
+    mock_ingress_data_func.return_value = listExample
+    responses.add(responses.GET, 'https://test.io',
+                  status=200)
+    responses.add(responses.GET, 'http://testem.test.svc.cluster.local',
+                  status=200)
+
+    request_durations = ping.measureRequests()
+    assert request_durations[0]['name'] == 'testy'
+    assert request_durations[0]['service_latency']
+    assert request_durations[0]['host_latency']
