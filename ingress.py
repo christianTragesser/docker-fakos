@@ -4,12 +4,11 @@ from kubernetes import client, config
 import json
 import time
 import os
-import ping
 
 def getIngress():
     kubeConfig = '/tmp/config'
-    ingressList = []
     ingress = {}
+    ingressList = []
     global config
 
     if os.path.exists(kubeConfig):
