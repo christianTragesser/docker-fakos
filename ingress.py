@@ -1,8 +1,5 @@
-#!/usr/local/bin/python
-
 from kubernetes import client, config
 import json
-import time
 import os
 
 def getIngressList():
