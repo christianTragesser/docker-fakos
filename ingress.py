@@ -7,13 +7,11 @@ import os
 
 def getIngressList():
     kubeConfig = '/tmp/config'
-    ingress = {}
     ingressList = []
     global config
 
     if os.path.exists(kubeConfig):
         config.load_kube_config(kubeConfig)
-        print '\n Using local Kube config for API authentication/authorization...\n'
     else:
         tokenFile = "/var/run/secrets/kubernetes.io/serviceaccount/token"
         caFile = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
@@ -25,12 +23,12 @@ def getIngressList():
         config.api_key = {"authorization": "Bearer " + token}
         config.ssl_ca_cert = caFile
         client.Configuration.set_default(config)
-        print '\n Using cluster service account token for API authentication/authorization...\n'
 
     v1beta1 = client.ExtensionsV1beta1Api()
-
-    response = json.loads(v1beta1.list_ingress_for_all_namespaces(_preload_content=False))
+    
+    response = json.load(v1beta1.list_ingress_for_all_namespaces(_preload_content=False))
     for item in response['items']:
+        ingress = {}
         ingress['name'] = item['metadata']['name']
         ingress['namespace'] = item['metadata']['namespace']
         for rule in item['spec']['rules']:
