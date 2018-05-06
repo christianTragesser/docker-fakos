@@ -1,15 +1,19 @@
-from prometheus_client import start_http_server, Summary
+from prometheus_client import start_http_server, Gauge, Histogram
 import time
 import ping
 
-sService = Summary('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
-sHost = Summary('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
+gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
+hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 
 def recordMetrics():
     stats = ping.measureRequests()
     for service in stats:
-        sService.labels(service['name'], service['namespace']).observe(service['service_latency'])
-        sHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
+        hService.labels(service['name'], service['namespace']).observe(service['service_latency'])
+        hHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
+        gService.labels(service['name'], service['namespace']).set(service['service_latency'])
+        gHost.labels(service['name'], service['namespace']).set(service['host_latency'])
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
