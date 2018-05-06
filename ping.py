@@ -10,6 +10,7 @@ def constructURLs():
         urls['name'] = service['name']
         urls['host'] = 'https://'+service['host']
         urls['service'] = 'http://'+service['serviceName']+'.'+service['namespace']+'.svc.cluster.local'
+        urls['namespace'] = service['namespace']
         endpoints.append(urls)
     return endpoints
 
@@ -19,6 +20,7 @@ def measureRequests():
     for service in urlObjects:
         measurements = {}
         measurements['name'] = service['name']
+        measurements['namespace'] = service['namespace']
         measurements['service_latency'] = getRequestDuration(service['service'])
         measurements['host_latency'] = getRequestDuration(service['host'])
         stats.append(measurements)
