@@ -18,6 +18,6 @@ if __name__ == '__main__':
     while True:
         try:
             recordMetrics()
-            time.sleep(5)
+            time.sleep(10)
         except ValueError as e:
             print e
