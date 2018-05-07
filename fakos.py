@@ -13,6 +13,8 @@ def logRecord(item):
     record['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) 
     record['name'] = item['name']
     record['namespace'] = item['namespace']
+    record['service_latency'] = item['service_latency']
+    record['host_latency'] = item['host_latency']
     return record
 
 def recordMetrics():
