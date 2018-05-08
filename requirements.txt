@@ -1,3 +1,4 @@
 requests==2.18.4
 kubernetes==6.0.0
 prometheus-client==0.2.0
+python-json-logger==0.1.8
