@@ -1,0 +1,24 @@
+fullname: fakos-metrics-exporter
+namespace: kube-system
+deployment:
+  image:
+    repository: christiantragesser/fakos
+    tag: latest
+    pullPolicy: Always
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 128Mi
+      cpu: 30m
+  readinessProbe:
+    path: /
+    port: 8000
+  livenessProbe:
+    path: /metrics
+    port: 8000
+service:
+  name: metrics
+  type: ClusterIP
+  port: 8000

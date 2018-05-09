@@ -1,0 +1,10 @@
+apiVersion: v1
+appVersion: "0.1.0"
+description: Fakós request latency monitor
+name: fakos
+version: 0.1.0
+icon: https://evoen.net/images/laughing.png
+keywords:
+- ctt
+- fakos
+- monitoring

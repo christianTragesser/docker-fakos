@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
+  labels:
+    prometheus: {{ .Values.fullname | quote }}
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      prometheus: {{ .Values.fullname | quote }}
+  template:
+    metadata:
+      labels:
+        prometheus: {{ .Values.fullname | quote }}
+        name: {{ .Values.fullname | quote }}
+    spec:
+      serviceAccountName: {{ .Values.fullname | quote }}
+      terminationGracePeriodSeconds: 60
+      containers:
+      - image: christiantragesser/fakos
+        name: fakos
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: {{ .Values.deployment.resources.requests.memory | quote }}
+            cpu:  {{ .Values.deployment.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.deployment.resources.limits.memory | quote }}
+            cpu: {{ .Values.deployment.resources.limits.cpu | quote }}
+        livenessProbe:
+            httpGet:
+              path: {{ .Values.deployment.livenessProbe.path | quote }}
+              port: {{ .Values.deployment.livenessProbe.port }}
+        readinessProbe:
+            httpGet:
+              path: {{ .Values.deployment.readinessProbe.path | quote }}
+              port: {{ .Values.deployment.readinessProbe.port }}
