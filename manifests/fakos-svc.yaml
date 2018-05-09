@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: fakos-metrics-exporter
+  namespace: kube-system
+  labels:
+    prometheus: fakos-metrics-exporter
+spec:
+  selector:
+    prometheus: fakos-metrics-exporter
+    name: fakos-metrics-exporter
+  ports:
+    - protocol: TCP
+      port: 8000
+      name: metrics
