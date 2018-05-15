@@ -4,16 +4,16 @@ metadata:
   name: {{ .Values.fullname | quote }}
   namespace: {{ .Values.namespace | quote }}
   labels:
-    prometheus: {{ .Values.fullname | quote }}
+    {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      prometheus: {{ .Values.fullname | quote }}
+      {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
   template:
     metadata:
       labels:
-        prometheus: {{ .Values.fullname | quote }}
+        {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
         name: {{ .Values.fullname | quote }}
     spec:
       serviceAccountName: {{ .Values.fullname | quote }}

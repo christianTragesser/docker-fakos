@@ -4,10 +4,10 @@ metadata:
   name: {{ .Values.fullname | quote }}
   namespace: {{ .Values.namespace | quote }}
   labels:
-    prometheus: {{ .Values.fullname | quote }}
+    {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
 spec:
   selector:
-    prometheus: {{ .Values.fullname | quote }}
+    {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
     name: {{ .Values.fullname | quote }}
   ports:
     - protocol: TCP
