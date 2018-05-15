@@ -9,10 +9,10 @@ deployment:
   resources:
     requests:
       memory: 64Mi
-      cpu: 10m
+      cpu: 30m
     limits:
       memory: 128Mi
-      cpu: 30m
+      cpu: 60m
   readinessProbe:
     path: /
     port: 8000
