@@ -3,7 +3,8 @@ import json
 import os
 
 def getIngressList():
-    kubeConfig = '/tmp/docker/test/sample.config'
+    scriptDir = (os.path.dirname(os.path.realpath(__file__)))
+    kubeConfig = scriptDir+'/test/sample.config'
     ingressList = []
     global config
 
