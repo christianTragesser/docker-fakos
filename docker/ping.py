@@ -6,10 +6,11 @@ def constructURLs():
     endpoints = []
     ingressData = ingress.getIngressList()
     for service in ingressData:
+        servicePort = str(service['servicePort'])
         urls = {}
         urls['name'] = service['name']
         urls['host'] = 'https://'+service['host']
-        urls['service'] = 'http://'+service['serviceName']+'.'+service['namespace']+'.svc.cluster.local'
+        urls['service'] = 'http://'+service['serviceName']+'.'+service['namespace']+'.svc.cluster.local:'+servicePort
         urls['namespace'] = service['namespace']
         endpoints.append(urls)
     return endpoints

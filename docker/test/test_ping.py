@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import ingress
 import ping
 
-listExample = [{'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy'}]
+listExample = [{'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy', 'servicePort': 3000}]
 
 @mock.patch('ingress.getIngressList')
 def test_create_endpoint_objects(mock_ingress_data_func):
@@ -18,7 +18,7 @@ def test_create_endpoint_objects(mock_ingress_data_func):
     mock_ingress_data_func.return_value = listExample
     urlObjects = ping.constructURLs()
     assert urlObjects[0]['name'] == 'testy'
-    assert urlObjects[0]['service'] == 'http://testem.test.svc.cluster.local'
+    assert urlObjects[0]['service'] == 'http://testem.test.svc.cluster.local:3000'
     assert urlObjects[0]['host'] == 'https://test.io'
     assert urlObjects[0]['namespace'] == 'test'
 
@@ -31,7 +31,7 @@ def test_request_url_enpoints(mock_ingress_data_func):
     mock_ingress_data_func.return_value = listExample
     responses.add(responses.GET, 'https://test.io',
                   status=404)
-    responses.add(responses.GET, 'http://testem.test.svc.cluster.local',
+    responses.add(responses.GET, 'http://testem.test.svc.cluster.local:3000',
                   status=200)
 
     request_durations = ping.measureRequests()
