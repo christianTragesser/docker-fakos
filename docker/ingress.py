@@ -32,6 +32,7 @@ def getIngressList():
             ingress['host'] = rule['host']
             for path in rule['http']['paths']:
                 ingress['serviceName'] = path['backend']['serviceName']
+                ingress['servicePort'] = path['backend']['servicePort']
         ingressList.append(ingress)
     return ingressList
 
