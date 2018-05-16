@@ -9,10 +9,13 @@ services:
 stages:
   - test
 
-unit_tests:
+test:
   stage: test
   tags:
     - docker
-
   script:
-    - bash -C $CI_PROJECT_DIR/fakos_ci.sh
+    - bash -C $CI_PROJECT_DIR/fakos_ci.sh test
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - docker tag christiantragesser/fakos:latest christiantragesser/fakos:$CI_COMMIT_SHA
+    - docker push christiantragesser/fakos:$CI_COMMIT_SHA
+    - docker push christiantragesser/fakos:latest
