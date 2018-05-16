@@ -10,6 +10,8 @@ RUN pip install -r /opt/requirements.txt && \
     chmod 777 /opt/*
 USER fakos
 
+ENV INTERVAL 10
+
 EXPOSE 8000
 
 CMD ["python", "/opt/fakos.py"]

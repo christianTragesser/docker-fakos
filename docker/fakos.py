@@ -3,6 +3,7 @@ from pythonjsonlogger import jsonlogger
 import logging
 import time
 import sys
+import os
 import ping
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
@@ -16,6 +17,8 @@ gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 
 gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+
+interval = int(os.environ['INTERVAL'])
 
 def recordMetrics():
     stats = ping.measureRequests()
@@ -33,6 +36,6 @@ if __name__ == '__main__':
     while True:
         try:
             recordMetrics()
-            time.sleep(10)
+            time.sleep(interval)
         except Exception, e:
             log.error(e)
