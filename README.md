@@ -1,4 +1,5 @@
 # Fakós (φακός)
+[![pipeline status](https://gitlab.com/christianTragesser/fakos/badges/master/pipeline.svg)](https://gitlab.com/christianTragesser/fakos/commits/master)
 
 Fakós is a request latency monitor for [ Kubernetes ](https://kubernetes.io/) Services with Ingress.
 
