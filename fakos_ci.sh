@@ -33,7 +33,8 @@ function unit {
 }
 
 function build {
-  cd $SCRIPT_DIR/docker && docker build -t christiantragesser/fakos .
+  docker pull christiantragesser/fakos:latest
+  cd $SCRIPT_DIR/docker && docker build --cache-from christiantragesser/fakos:latest -t christiantragesser/fakos .
 }
 
 ci
