@@ -6,11 +6,14 @@ import mock
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import ingress
 
+dirPath = os.path.dirname(os.path.realpath(__file__))
+testJson = dirPath+'/multi.json'
+
 @mock.patch('kubernetes.client.ExtensionsV1beta1Api.list_ingress_for_all_namespaces')
 def test_get_ingress_objects(mock_list_ingress_func):
     #query k8s ingress API
     #return list of ingress details
-    mock_list_ingress_func.return_value = open('multi.json', 'r')
+    mock_list_ingress_func.return_value = open(testJson, 'r')
     ingressList = ingress.getIngressList()
     assert ingressList[0]['name'] == 'testy'
     assert ingressList[0]['namespace'] == 'test'

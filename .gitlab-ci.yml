@@ -1,7 +1,8 @@
-image: christiantragesser/dind-ci
+image: registry.gitlab.com/christiantragesser/dind-py:fakos
 
 variables:
   DOCKER_DRIVER: overlay2
+  EXT_NAME: $CI_REGISTRY/christiantragesser/fakos
 
 services:
   - name: docker:dind
@@ -14,8 +15,9 @@ test:
   tags:
     - docker
   script:
-    - bash -C $CI_PROJECT_DIR/fakos_ci.sh test
-    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - docker tag christiantragesser/fakos:latest christiantragesser/fakos:$CI_COMMIT_SHA
-    - docker push christiantragesser/fakos:$CI_COMMIT_SHA
-    - docker push christiantragesser/fakos:latest
+    - $CI_PROJECT_DIR/ci.py test
+    - docker tag local/fakos:latest $EXT_NAME:latest
+    - docker tag $EXT_NAME:latest $EXT_NAME:$CI_COMMIT_SHA
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $EXT_NAME:latest | grep -e "The push refers to" -e latest
+    - docker push $EXT_NAME:$CI_COMMIT_SHA | grep -e "The push refers to" -e latest
