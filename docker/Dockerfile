@@ -1,13 +1,12 @@
-FROM python:2.7-alpine
-
-COPY requirements.txt /opt/requirements.txt
+FROM python:3-alpine
 
 COPY *.py /opt/
 
-RUN pip install -r /opt/requirements.txt && \
+RUN pip install requests prometheus-client \
+    kubernetes==6.0.0 python-json-logger --no-cache-dir && \
     addgroup -S -g 2222 fakos && \
     adduser -S -u 2222 -g fakos fakos && \
-    chmod 777 /opt/*
+    chmod 755 /opt/*
 USER fakos
 
 ENV INTERVAL 10

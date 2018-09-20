@@ -37,5 +37,5 @@ if __name__ == '__main__':
         try:
             recordMetrics()
             time.sleep(interval)
-        except Exception, e:
+        except Exception as e:
             log.error(e)

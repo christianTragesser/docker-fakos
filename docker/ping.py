@@ -37,5 +37,5 @@ def getRequestDuration(url):
             return r.elapsed.total_seconds()
     except requests.exceptions.RequestException as e:
         #request not able to reach service, return 0s response time
-        print e
+        print(e)
         return 0
