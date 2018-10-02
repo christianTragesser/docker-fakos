@@ -19,7 +19,7 @@ spec:
       serviceAccountName: {{ .Values.fullname | quote }}
       terminationGracePeriodSeconds: 60
       containers:
-      - image: christiantragesser/fakos
+      - image: {{ .Values.deployment.image.repository | quote }}
         name: fakos
         imagePullPolicy: Always
         resources:

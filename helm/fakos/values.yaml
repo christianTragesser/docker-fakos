@@ -3,7 +3,7 @@ namespace: kube-system
 prometheusLabelKey: prometheus
 deployment:
   image:
-    repository: christiantragesser/fakos
+    repository: registry.gitlab.com/christiantragesser/fakos
     tag: latest
     pullPolicy: Always
   resources:
