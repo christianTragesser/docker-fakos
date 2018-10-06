@@ -1,5 +1,7 @@
 import requests
 import ingress
+from multiprocessing import Pool
+from multiprocessing import cpu_count
 
 def constructURLs():
     global ingress
@@ -16,16 +18,22 @@ def constructURLs():
     return endpoints
 
 def measureRequests():
-    stats = []
     urlObjects = constructURLs()
-    for service in urlObjects:
-        measurements = {}
-        measurements['name'] = service['name']
-        measurements['namespace'] = service['namespace']
-        measurements['service_latency'] = getRequestDuration(service['service'])
-        measurements['host_latency'] = getRequestDuration(service['host'])
-        stats.append(measurements)
-    return stats
+    # split endpoint latency requests across number of available host processors
+    processes = cpu_count()
+    pool = Pool(processes)
+    return list(pool.map(constructResults, urlObjects))
+
+def constructResults(urlObject):
+    servicePaths = [ urlObject['service'], urlObject['host'] ]
+    latencies = list(map(getRequestDuration, servicePaths))
+
+    measurement = {}
+    measurement['service_latency'] = latencies[0]
+    measurement['host_latency'] = latencies[1]
+    measurement['name'] = urlObject['name']
+    measurement['namespace'] = urlObject['namespace']
+    return measurement
 
 def getRequestDuration(url):
     try:
