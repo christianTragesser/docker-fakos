@@ -13,12 +13,6 @@ deployment:
     limits:
       memory: 128Mi
       cpu: 60m
-  readinessProbe:
-    path: /
-    port: 8000
-  livenessProbe:
-    path: /metrics
-    port: 8000
 service:
   name: metrics
   type: ClusterIP

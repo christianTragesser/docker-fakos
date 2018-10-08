@@ -29,11 +29,3 @@ spec:
           limits:
             memory: {{ .Values.deployment.resources.limits.memory | quote }}
             cpu: {{ .Values.deployment.resources.limits.cpu | quote }}
-        livenessProbe:
-            httpGet:
-              path: {{ .Values.deployment.livenessProbe.path | quote }}
-              port: {{ .Values.deployment.livenessProbe.port }}
-        readinessProbe:
-            httpGet:
-              path: {{ .Values.deployment.readinessProbe.path | quote }}
-              port: {{ .Values.deployment.readinessProbe.port }}
