@@ -39,17 +39,3 @@ def test_create_endpoint_dictionaries(mock_stats_data_func):
         assert record['host_latency'] == statsData[index]['host_latency']
         assert record['service_latency'] == statsData[index]['service_latency']
         index += 1
-
-@mock.patch('ping.measureRequests')
-def test_create_endpoint_logs(mock_stats_data_func, caplog):
-    #takes in a list of request status dicts from ping.py
-    #constructs log dict containing stats of each test status
-    mock_stats_data_func.return_value = statsData
-    fakos.recordMetrics()
-    index = 0
-    for record in statsData:
-        assert record['name'] in caplog.text
-        assert record['namespace'] in caplog.text
-        assert str(record['host_latency']) in caplog.text
-        assert str(record['service_latency']) in caplog.text
-        index += 1

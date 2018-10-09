@@ -1,7 +1,17 @@
 import requests
 import ingress
+import logging
+import sys
+from pythonjsonlogger import jsonlogger
 from multiprocessing import Pool
 from multiprocessing import cpu_count
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+log = logging.getLogger()
+logHandler = logging.StreamHandler()
+formatter = jsonlogger.JsonFormatter()
+logHandler.setFormatter(formatter)
+log.addHandler(logHandler)
 
 def constructURLs():
     global ingress
@@ -33,6 +43,8 @@ def constructResults(urlObject):
     measurement['host_latency'] = latencies[1]
     measurement['name'] = urlObject['name']
     measurement['namespace'] = urlObject['namespace']
+    
+    log.info(measurement)
     return measurement
 
 def getRequestDuration(url):

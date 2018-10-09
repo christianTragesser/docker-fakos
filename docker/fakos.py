@@ -6,13 +6,6 @@ import sys
 import os
 import ping
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-log = logging.getLogger()
-logHandler = logging.StreamHandler()
-formatter = jsonlogger.JsonFormatter()
-logHandler.setFormatter(formatter)
-log.addHandler(logHandler)
-
 gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
@@ -27,7 +20,7 @@ def recordMetrics():
         hHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
         gService.labels(service['name'], service['namespace']).set(service['service_latency'])
         gHost.labels(service['name'], service['namespace']).set(service['host_latency'])
-        log.info(service)
+        
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
@@ -38,4 +31,4 @@ if __name__ == '__main__':
             recordMetrics()
             time.sleep(interval)
         except Exception as e:
-            log.error(e)
+            print(e)
