@@ -33,6 +33,16 @@ def test_get_not_after_date(mock_create_default_context, mock_create_connection,
     #returns certificate notAfter datetime.date
     mock_create_connection.return_value = mock_get_addr_info
     mock_create_default_context.return_value.wrap_socket.return_value.__enter__.return_value.getpeercert.return_value = certResponse
-    
+
     expireDate = sslCheck.getNotAfterDate('test.io')
     assert expireDate == notAfter.date()
+
+
+notAfterResponse = notAfter.date()
+@mock.patch('sslCheck.getNotAfterDate', return_value=notAfterResponse)
+def test_cert_days_remain(mock_get_notAfter_date):
+    #takes in cert notAfter date
+    #get today's date
+    #return difference in days between today and notAfter date
+    daysRemaining = sslCheck.certDaysRemaining('test.io')
+    assert daysRemaining == 56

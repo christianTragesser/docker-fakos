@@ -1,5 +1,6 @@
 import requests
 import ingress
+import sslCheck
 import logging
 import sys
 from pythonjsonlogger import jsonlogger
@@ -21,8 +22,8 @@ def constructURLs():
         servicePort = str(service['servicePort'])
         urls = {}
         urls['name'] = service['name']
-        urls['host'] = 'https://'+service['host']
-        urls['service'] = 'http://'+service['serviceName']+'.'+service['namespace']+'.svc.cluster.local:'+servicePort
+        urls['host'] = service['host']
+        urls['service'] = service['serviceName']+'.'+service['namespace']+'.svc.cluster.local:'+servicePort
         urls['namespace'] = service['namespace']
         endpoints.append(urls)
     return endpoints
@@ -32,20 +33,8 @@ def measureRequests():
     # split endpoint latency requests across number of available host processors
     processes = cpu_count()
     pool = Pool(processes)
-    return list(pool.map(constructResults, urlObjects))
-
-def constructResults(urlObject):
-    servicePaths = [ urlObject['service'], urlObject['host'] ]
-    latencies = list(map(getRequestDuration, servicePaths))
-
-    measurement = {}
-    measurement['service_latency'] = latencies[0]
-    measurement['host_latency'] = latencies[1]
-    measurement['name'] = urlObject['name']
-    measurement['namespace'] = urlObject['namespace']
-    
-    log.info(measurement)
-    return measurement
+    measurements = list(pool.map(constructResults, urlObjects))
+    return measurements
 
 def getRequestDuration(url):
     try:
@@ -55,7 +44,31 @@ def getRequestDuration(url):
             return 0
         else:
             return r.elapsed.total_seconds()
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         #request not able to reach service, return 0s response time
-        print(e)
+        #log.error(e)
         return 0
+
+def constructResults(urlObject):
+    servicePaths = [ 'http://'+urlObject['service'], 'https://'+urlObject['host'] ]
+    latencies = []
+    for path in servicePaths:
+        latencies.append(getRequestDuration(path))
+
+    print(latencies)
+    try:
+        print(urlObject['host'])
+        validDays = sslCheck.certDaysRemaining(urlObject['host'])
+    except Exception as e:
+        print('Your cert check is failing because your passing the protocol with the FQDN')
+        print(e)
+
+    measurement = {}
+    measurement['service_latency'] = latencies[0]
+    measurement['host_latency'] = latencies[1]
+    measurement['name'] = urlObject['name']
+    measurement['namespace'] = urlObject['namespace']
+    measurement['validCertDaysRemaining'] = validDays
+    
+    log.info(measurement)
+    return measurement

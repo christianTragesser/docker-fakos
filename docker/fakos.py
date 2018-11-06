@@ -8,6 +8,7 @@ import ping
 
 gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+gValidCertDays = Gauge('valid_cert_days_remaining', 'valid certificate days remaining(days)', ['service', 'namespace'])
 hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 
@@ -20,6 +21,7 @@ def recordMetrics():
         hHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
         gService.labels(service['name'], service['namespace']).set(service['service_latency'])
         gHost.labels(service['name'], service['namespace']).set(service['host_latency'])
+        gValidCertDays.labels(service['name'], service['namespace']).set(service['validCertDaysRemaining'])
         
 
 if __name__ == '__main__':
