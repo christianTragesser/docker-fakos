@@ -3,7 +3,7 @@ import sys
 import os
 import mock
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import fakos
+import main
 
 statsData = [
     {
@@ -34,7 +34,7 @@ def test_create_endpoint_dictionaries(mock_measure_data_func):
     #takes in a list of request status dicts from ping.py
     #return single dict record containing stats for each test status
     mock_measure_data_func.return_value = statsData
-    fakos.recordMetrics()
+    main.recordMetrics()
     index = 0
     for record in statsData:
         assert record['name'] == statsData[index]['name']

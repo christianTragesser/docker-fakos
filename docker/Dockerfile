@@ -17,4 +17,4 @@ ENV INTERVAL 10
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python -u /opt/fakos.py"]
+CMD ["/bin/sh", "-c", "python -u /opt/main.py"]
