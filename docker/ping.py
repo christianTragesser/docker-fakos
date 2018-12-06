@@ -4,8 +4,7 @@ import sslCheck
 import logging
 import sys
 from pythonjsonlogger import jsonlogger
-from multiprocessing import Pool
-from multiprocessing import cpu_count
+from multiprocessing import Pool, cpu_count
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger()
@@ -39,11 +38,7 @@ def measureRequests():
 def getRequestDuration(url):
     try:
         r = requests.get(url)
-        #if request returns non success, return 0
-        if r.status_code > 307:
-            return 0
-        else:
-            return r.elapsed.total_seconds()
+        return r.elapsed.total_seconds()
     except Exception as e:
         #request not able to reach service, return 0s response time
         #log.error(e)

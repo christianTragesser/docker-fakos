@@ -42,7 +42,7 @@ def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
     request_durations = ping.measureRequests()
     assert request_durations[0]['name'] == 'testy'
     assert request_durations[0]['service_latency']
-    assert request_durations[0]['host_latency'] == 0
+    assert request_durations[0]['host_latency']
     assert request_durations[0]['namespace'] == 'test'
     assert request_durations[0]['validCertDaysRemaining'] == 56
 
