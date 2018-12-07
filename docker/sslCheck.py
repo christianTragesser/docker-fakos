@@ -15,6 +15,12 @@ def getNotAfterDate(site):
 
 def certDaysRemaining(site):
     today = date.today()
-    certNotAfterDate = getNotAfterDate(site)
-    daysRemaining = certNotAfterDate - today
-    return daysRemaining.days
+    try:
+        certNotAfterDate = getNotAfterDate(site)
+        daysRemaining = certNotAfterDate - today
+        return daysRemaining.days
+    except Exception as e:
+        print('\nA certificate check is failing, {0:s} is not valid:'.format(site))
+        print(e)
+        print('\n')
+        return -1

@@ -40,7 +40,6 @@ def getRequestDuration(url):
         r = requests.get(url)
         return r.elapsed.total_seconds()
     except Exception as e:
-        #request not able to reach service, return 0s response time
         log.error(e)
         return -1
 
@@ -50,11 +49,7 @@ def constructResults(urlObject):
     for path in servicePaths:
         latencies.append(getRequestDuration(path))
 
-    try:
-        validDays = sslCheck.certDaysRemaining(urlObject['host'])
-    except Exception as e:
-        print('Your cert check is failing because your passing the protocol with the FQDN')
-        print(e)
+    validDays = sslCheck.certDaysRemaining(urlObject['host'])
 
     measurement = {}
     measurement['service_latency'] = latencies[0]

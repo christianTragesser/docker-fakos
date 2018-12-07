@@ -10,7 +10,7 @@ import sslCheck
 
 listExample = [{'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy', 'servicePort': 3000}]
 objExample = {'name': 'testy', 'namespace': 'test', 'host': 'https://test.io', 'service': 'http://testem.test.svc.cluster.local:3000'}
-durationExample = [{'service_latency': 0.000551, 'host_latency': 0, 'name': 'testy', 'namespace': 'test'}]
+durationExample = [{'service_latency': 0.000551, 'host_latency': -1, 'name': 'testy', 'namespace': 'test'}]
 
 @mock.patch('ingress.getIngressList')
 def test_create_endpoint_objects(mock_ingress_data_func):
@@ -57,3 +57,15 @@ def test_log_metrics(mock_reqs_dur_data, mock_ssl_check, caplog):
     assert str(durationExample[0]['host_latency']) in caplog.text
     assert durationExample[0]['namespace'] in caplog.text
     assert str(mock_ssl_check.return_value) in caplog.text
+
+exception_message = 'testing exception handling'
+@mock.patch('sslCheck.getNotAfterDate', side_effect=Exception(exception_message))
+@mock.patch('ping.getRequestDuration')
+def test_certs_error(mock_reqs_dur_data, mock_ssl_check, caplog):
+    mock_reqs_dur_data.return_value = durationExample
+    ping.constructResults(objExample)
+    assert durationExample[0]['name'] in caplog.text
+    assert str(durationExample[0]['service_latency']) in caplog.text
+    assert str(durationExample[0]['host_latency']) in caplog.text
+    assert durationExample[0]['namespace'] in caplog.text
+    assert "'validCertDaysRemaining': -1" in caplog.text
