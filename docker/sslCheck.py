@@ -1,6 +1,9 @@
 import ssl
 import socket
 from datetime import datetime, date
+import logs
+
+log = logs.logger('fakos')
 
 def getNotAfterDate(site):
     port = '443'
@@ -20,7 +23,6 @@ def certDaysRemaining(site):
         daysRemaining = certNotAfterDate - today
         return daysRemaining.days
     except Exception as e:
-        print('\nA certificate check is failing, {0:s} is not valid:'.format(site))
-        print(e)
-        print('\n')
+        log.error('A certificate check is failing, {0:s} is not valid:'.format(site))
+        log.error(e)
         return -1

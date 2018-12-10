@@ -1,17 +1,10 @@
 import requests
 import ingress
 import sslCheck
-import logging
-import sys
-from pythonjsonlogger import jsonlogger
+import logs
 from multiprocessing import Pool, cpu_count
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-log = logging.getLogger()
-logHandler = logging.StreamHandler()
-formatter = jsonlogger.JsonFormatter()
-logHandler.setFormatter(formatter)
-log.addHandler(logHandler)
+log = logs.logger('fakos')
 
 def constructURLs():
     global ingress

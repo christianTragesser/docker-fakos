@@ -62,10 +62,14 @@ exception_message = 'testing exception handling'
 @mock.patch('sslCheck.getNotAfterDate', side_effect=Exception(exception_message))
 @mock.patch('ping.getRequestDuration')
 def test_certs_error(mock_reqs_dur_data, mock_ssl_check, caplog):
+    #prints TLS certificate errors to log stream
     mock_reqs_dur_data.return_value = durationExample
     ping.constructResults(objExample)
     assert durationExample[0]['name'] in caplog.text
     assert str(durationExample[0]['service_latency']) in caplog.text
     assert str(durationExample[0]['host_latency']) in caplog.text
     assert durationExample[0]['namespace'] in caplog.text
+    assert "A certificate check is failing, https://test.io is not valid:" in caplog.text
+    assert "testing exception handling" in caplog.text
     assert "'validCertDaysRemaining': -1" in caplog.text
+    assert False
