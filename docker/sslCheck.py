@@ -3,7 +3,7 @@ import socket
 from datetime import datetime, date
 import logs
 
-log = logs.logger('fakos')
+log = logs.logger('certs')
 
 def getNotAfterDate(site):
     port = '443'

@@ -4,7 +4,7 @@ import sslCheck
 import logs
 from multiprocessing import Pool, cpu_count
 
-log = logs.logger('fakos')
+log = logs.logger('ping')
 
 def constructURLs():
     global ingress

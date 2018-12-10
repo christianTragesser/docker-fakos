@@ -72,4 +72,3 @@ def test_certs_error(mock_reqs_dur_data, mock_ssl_check, caplog):
     assert "A certificate check is failing, https://test.io is not valid:" in caplog.text
     assert "testing exception handling" in caplog.text
     assert "'validCertDaysRemaining': -1" in caplog.text
-    assert False
