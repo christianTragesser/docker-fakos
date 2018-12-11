@@ -1,8 +1,5 @@
 from prometheus_client import start_http_server, Gauge, Histogram
-from pythonjsonlogger import jsonlogger
-import logging
 import time
-import sys
 import os
 import ping
 
@@ -12,7 +9,7 @@ gValidCertDays = Gauge('valid_cert_days_remaining', 'valid certificate days rema
 hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 
-interval = int(os.environ['INTERVAL'])
+interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
 
 def recordMetrics():
     stats = ping.measureRequests()
