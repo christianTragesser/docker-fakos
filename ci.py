@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 from argparse import ArgumentParser
-from dind import Pipeline
+from pyplineCI import Pipeline
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 buildPath = dirPath+'/docker/'
@@ -23,7 +23,7 @@ def test():
         dirPath: { 'bind': '/tmp', 'mode': 'rw'}
     }
     print('Starting tests:')
-    pipeline.runContainerInteractive(image=pipeline.dockerRegistry+'/dind-py:fakos',
+    pipeline.runI(image=pipeline.dockerRegistry+'/pypline-ci:fakos',
                                      name='fakos-test', working_dir=testDir, volumes=volumes, command='pytest')
     pipeline.buildImage(buildPath, localTag)
     print('Testing complete')
@@ -38,7 +38,7 @@ def local():
     }
     print('Initializing locally built instance:')
     pipeline.buildImage(buildPath,localTag)
-    pipeline.runContainerInteractive(image=localTag,
+    pipeline.runI(image=localTag,
                                      name='fakos-local', working_dir='/tmp', volumes=volumes, command='/bin/sh')
 
 def main():

@@ -1,4 +1,4 @@
-image: registry.gitlab.com/christiantragesser/dind-py:fakos
+image: registry.gitlab.com/christiantragesser/pypline-ci:fakos
 
 variables:
   DOCKER_DRIVER: overlay2
