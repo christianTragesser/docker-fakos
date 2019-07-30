@@ -6,22 +6,17 @@ from multiprocessing import Pool, cpu_count
 
 log = logs.logger('ping')
 
-def constructURLs():
-    global ingress
-    endpoints = []
-    ingressData = ingress.getIngressList()
-    for service in ingressData:
-        servicePort = str(service['servicePort'])
-        urls = {}
-        urls['name'] = service['name']
-        urls['host'] = service['host']
-        urls['service'] = service['serviceName']+'.'+service['namespace']+'.svc.cluster.local:'+servicePort
-        urls['namespace'] = service['namespace']
-        endpoints.append(urls)
+def construct_service_url(data):
+    data['service'] = data['serviceName']+'.'+data['namespace']+'.svc.cluster.local:'+str(data['servicePort'])
+    return data
+
+def construct_endpoints():
+    ingressData = ingress.get_ingress_list()
+    endpoints = [ construct_service_url(service) for service in ingressData ]
     return endpoints
 
 def measureRequests():
-    urlObjects = constructURLs()
+    urlObjects = construct_endpoints()
     # split endpoint latency requests across number of available host processors
     processes = cpu_count()
     pool = Pool(processes)
@@ -38,10 +33,7 @@ def getRequestDuration(url):
 
 def constructResults(urlObject):
     servicePaths = [ 'http://'+urlObject['service'], 'https://'+urlObject['host'] ]
-    latencies = []
-    for path in servicePaths:
-        latencies.append(getRequestDuration(path))
-
+    latencies = [ getRequestDuration(path) for path in servicePaths ]
     validDays = sslCheck.certDaysRemaining(urlObject['host'])
 
     measurement = {}
