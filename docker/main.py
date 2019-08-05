@@ -11,8 +11,8 @@ hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'name
 
 interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
 
-def recordMetrics():
-    stats = ping.measureRequests()
+def record_metrics():
+    stats = ping.measure_requests()
     for service in stats:
         hService.labels(service['name'], service['namespace']).observe(service['service_latency'])
         hHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # Start measuring ingress/service latencies
     while True:
         try:
-            recordMetrics()
+            record_metrics()
             time.sleep(interval)
         except Exception as e:
             print(e)

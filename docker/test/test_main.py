@@ -29,12 +29,12 @@ statsData = [
     }
 ]
 
-@mock.patch('ping.measureRequests')
+@mock.patch('ping.measure_requests')
 def test_create_endpoint_dictionaries(mock_measure_data_func):
     #takes in a list of request status dicts from ping.py
     #return single dict record containing stats for each test status
     mock_measure_data_func.return_value = statsData
-    main.recordMetrics()
+    main.record_metrics()
     index = 0
     for record in statsData:
         assert record['name'] == statsData[index]['name']

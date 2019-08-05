@@ -5,7 +5,7 @@ import logs
 
 log = logs.logger('certs')
 
-def getNotAfterDate(site):
+def get_not_after_date(site):
     port = '443'
 
     context = ssl.create_default_context()
@@ -16,10 +16,10 @@ def getNotAfterDate(site):
     dt = (datetime.strptime(data['notAfter'], '%b %d %H:%M:%S %Y %Z'))
     return dt.date()
 
-def certDaysRemaining(site):
+def cert_days_remaining(site):
     today = date.today()
     try:
-        certNotAfterDate = getNotAfterDate(site)
+        certNotAfterDate = get_not_after_date(site)
         daysRemaining = certNotAfterDate - today
         return daysRemaining.days
     except Exception as e:

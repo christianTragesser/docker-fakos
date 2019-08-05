@@ -15,15 +15,15 @@ def construct_endpoints():
     endpoints = [ construct_service_url(service) for service in ingressData ]
     return endpoints
 
-def measureRequests():
+def measure_requests():
     urlObjects = construct_endpoints()
     # split endpoint latency requests across number of available host processors
     processes = cpu_count()
     pool = Pool(processes)
-    measurements = list(pool.map(constructResults, urlObjects))
+    measurements = list(pool.map(construct_results, urlObjects))
     return measurements
 
-def getRequestDuration(url):
+def get_request_duration(url):
     try:
         r = requests.get(url)
         return r.elapsed.total_seconds()
@@ -31,10 +31,10 @@ def getRequestDuration(url):
         log.error(e)
         return -1
 
-def constructResults(urlObject):
+def construct_results(urlObject):
     servicePaths = [ 'http://'+urlObject['service'], 'https://'+urlObject['host'] ]
-    latencies = [ getRequestDuration(path) for path in servicePaths ]
-    validDays = sslCheck.certDaysRemaining(urlObject['host'])
+    latencies = [ get_request_duration(path) for path in servicePaths ]
+    validDays = sslCheck.cert_days_remaining(urlObject['host'])
 
     measurement = {}
     measurement['service_latency'] = latencies[0]

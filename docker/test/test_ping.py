@@ -27,7 +27,7 @@ def test_create_endpoint_objects(mock_ingress_data_func):
 
 
 @responses.activate
-@mock.patch('sslCheck.certDaysRemaining', return_value=56)
+@mock.patch('sslCheck.cert_days_remaining', return_value=56)
 @mock.patch('ingress.get_ingress_list')
 def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
     #takes in list of URL dicts
@@ -39,7 +39,7 @@ def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
     responses.add(responses.GET, 'http://testem.test.svc.cluster.local:3000',
                   status=200)
 
-    request_durations = ping.measureRequests()
+    request_durations = ping.measure_requests()
     assert request_durations[0]['name'] == 'testy'
     assert request_durations[0]['service_latency']
     assert request_durations[0]['host_latency']
@@ -47,11 +47,11 @@ def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
     assert request_durations[0]['validCertDaysRemaining'] == 56
 
 
-@mock.patch('sslCheck.certDaysRemaining', return_value=56)
-@mock.patch('ping.getRequestDuration')
+@mock.patch('sslCheck.cert_days_remaining', return_value=56)
+@mock.patch('ping.get_request_duration')
 def test_log_metrics(mock_reqs_dur_data, mock_ssl_check, caplog):
     mock_reqs_dur_data.return_value = durationExample
-    ping.constructResults(objExample)
+    ping.construct_results(objExample)
     assert durationExample[0]['name'] in caplog.text
     assert str(durationExample[0]['service_latency']) in caplog.text
     assert str(durationExample[0]['host_latency']) in caplog.text
@@ -59,12 +59,12 @@ def test_log_metrics(mock_reqs_dur_data, mock_ssl_check, caplog):
     assert str(mock_ssl_check.return_value) in caplog.text
 
 exception_message = 'testing exception handling'
-@mock.patch('sslCheck.getNotAfterDate', side_effect=Exception(exception_message))
-@mock.patch('ping.getRequestDuration')
+@mock.patch('sslCheck.get_not_after_date', side_effect=Exception(exception_message))
+@mock.patch('ping.get_request_duration')
 def test_certs_error(mock_reqs_dur_data, mock_ssl_check, caplog):
     #prints TLS certificate errors to log stream
     mock_reqs_dur_data.return_value = durationExample
-    ping.constructResults(objExample)
+    ping.construct_results(objExample)
     assert durationExample[0]['name'] in caplog.text
     assert str(durationExample[0]['service_latency']) in caplog.text
     assert str(durationExample[0]['host_latency']) in caplog.text
