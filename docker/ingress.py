@@ -41,8 +41,8 @@ def get_ingress_list():
     get_kube_credentials()
     v1beta1 = client.ExtensionsV1beta1Api()
     response = json.load(v1beta1.list_ingress_for_all_namespaces(_preload_content=False))
-    ingress_list = [ construct_ingress_obj(item) for item in response['items'] ]
-    return ingress_list
+    ingress_list = ( construct_ingress_obj(item) for item in response['items'] )
+    return tuple(ingress_list)
 
 if __name__ == "__main__":
     get_ingress_list()

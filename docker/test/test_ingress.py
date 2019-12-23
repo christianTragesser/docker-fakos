@@ -12,21 +12,18 @@ testJson = dirPath+'/multi.json'
 @mock.patch('kubernetes.client.ExtensionsV1beta1Api.list_ingress_for_all_namespaces')
 def test_get_ingress_objects(mock_list_ingress_func):
     #query k8s ingress API
-    #return list of ingress details
+    #return tuple of ingress details
+    with open(testJson) as f:
+        test_file = json.load(f)
+    test_data = dict(test_file)
+
     mock_list_ingress_func.return_value = open(testJson, 'r')
     ingressList = ingress.get_ingress_list()
-    assert ingressList[0]['name'] == 'testy'
-    assert ingressList[0]['namespace'] == 'test'
-    assert ingressList[0]['serviceName'] == 'testem'
-    assert ingressList[0]['servicePort'] == 3000
-    assert ingressList[0]['host'] == 'test.io'
-    assert ingressList[1]['name'] == 'test2'
-    assert ingressList[1]['namespace'] == 'default'
-    assert ingressList[1]['serviceName'] == 'test2em'
-    assert ingressList[1]['servicePort'] == 9093
-    assert ingressList[1]['host'] == 'test2.test.io'
-    assert ingressList[2]['name'] == 'test3'
-    assert ingressList[2]['namespace'] == 'monitoring'
-    assert ingressList[2]['serviceName'] == 'test3em'
-    assert ingressList[2]['servicePort'] == 80
-    assert ingressList[2]['host'] == 'test3.test.io'
+    assert isinstance(ingressList, tuple)
+    for item in ingressList:
+        i = ingressList.index(item)
+        assert ingressList[i]['name'] == test_data['items'][i]['metadata']['name']
+        assert ingressList[i]['namespace'] == test_data['items'][i]['metadata']['namespace']
+        assert ingressList[i]['serviceName'] == test_data['items'][i]['spec']['rules'][0]['http']['paths'][0]['backend']['serviceName']
+        assert ingressList[i]['servicePort'] == test_data['items'][i]['spec']['rules'][0]['http']['paths'][0]['backend']['servicePort']
+        assert ingressList[i]['host'] == test_data['items'][i]['spec']['rules'][0]['host']
