@@ -7,7 +7,6 @@ log = logs.logger('certs')
 
 def get_not_after_date(site):
     port = '443'
-
     context = ssl.create_default_context()
     with socket.create_connection((site, port)) as sock:
         with context.wrap_socket(sock, server_hostname=site) as ssock:

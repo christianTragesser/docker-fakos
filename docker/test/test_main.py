@@ -5,7 +5,7 @@ import mock
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import main
 
-statsData = [
+statsData = (
     {
         'host_latency': 0.111111,
         'name': 'testy', 
@@ -27,19 +27,18 @@ statsData = [
         'service_latency': 0.666666,
         'validCertDaysRemaining': -2,
     }
-]
+)
 
 @mock.patch('ping.measure_requests')
 def test_create_endpoint_dictionaries(mock_measure_data_func):
-    #takes in a list of request status dicts from ping.py
+    #takes in a tuple of request status dicts from ping.py
     #return single dict record containing stats for each test status
     mock_measure_data_func.return_value = statsData
     main.record_metrics()
-    index = 0
     for record in statsData:
-        assert record['name'] == statsData[index]['name']
-        assert record['namespace'] == statsData[index]['namespace']
-        assert record['host_latency'] == statsData[index]['host_latency']
-        assert record['service_latency'] == statsData[index]['service_latency']
-        assert record['validCertDaysRemaining'] == statsData[index]['validCertDaysRemaining']
-        index += 1
+        i = statsData.index(record)
+        assert record['name'] == statsData[i]['name']
+        assert record['namespace'] == statsData[i]['namespace']
+        assert record['host_latency'] == statsData[i]['host_latency']
+        assert record['service_latency'] == statsData[i]['service_latency']
+        assert record['validCertDaysRemaining'] == statsData[i]['validCertDaysRemaining']

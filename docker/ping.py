@@ -12,15 +12,15 @@ def construct_service_url(data):
 
 def construct_endpoints():
     ingressData = ingress.get_ingress_list()
-    endpoints = [ construct_service_url(service) for service in ingressData ]
-    return endpoints
+    endpoints = ( construct_service_url(service) for service in ingressData )
+    return tuple(endpoints)
 
 def measure_requests():
     urlObjects = construct_endpoints()
     # split endpoint latency requests across number of available host processors
     processes = cpu_count()
     pool = Pool(processes)
-    measurements = list(pool.map(construct_results, urlObjects))
+    measurements = tuple(pool.map(construct_results, urlObjects))
     return measurements
 
 def get_request_duration(url):

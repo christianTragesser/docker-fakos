@@ -8,18 +8,19 @@ import ingress
 import ping
 import sslCheck
 
-listExample = [{'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy', 'servicePort': 3000}]
+listExample = ({'host': 'test.io', 'serviceName': 'testem', 'namespace': 'test', 'name': 'testy', 'servicePort': 3000},)
 objExample = {'name': 'testy', 'namespace': 'test', 'host': 'https://test.io', 'service': 'http://testem.test.svc.cluster.local:3000'}
 durationExample = [{'service_latency': 0.000551, 'host_latency': -1, 'name': 'testy', 'namespace': 'test'}]
 
 @mock.patch('ingress.get_ingress_list')
 def test_create_endpoint_objects(mock_ingress_data_func):
-    #takes in a list of ingress dicts from ingress.py
+    #takes in a tuple of ingress dicts from ingress.py
     #construct service URL(s)
     #construct host URL(s)
-    #return array of dicts containing host and service URLs
+    #return tuple of dicts containing host and service URLs
     mock_ingress_data_func.return_value = listExample
     urlObjects = ping.construct_endpoints()
+    assert isinstance(urlObjects, tuple)
     assert urlObjects[0]['name'] == 'testy'
     assert urlObjects[0]['service'] == 'testem.test.svc.cluster.local:3000'
     assert urlObjects[0]['host'] == 'test.io'
@@ -30,7 +31,7 @@ def test_create_endpoint_objects(mock_ingress_data_func):
 @mock.patch('sslCheck.cert_days_remaining', return_value=56)
 @mock.patch('ingress.get_ingress_list')
 def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
-    #takes in list of URL dicts
+    #takes in tuple of URL dicts
     #perform http/https request against URL
     #return duration for host and service requests
     mock_ingress_data_func.return_value = listExample
@@ -40,6 +41,7 @@ def test_request_url_enpoints(mock_ingress_data_func, mock_ssl_check):
                   status=200)
 
     request_durations = ping.measure_requests()
+    assert isinstance(request_durations, tuple)
     assert request_durations[0]['name'] == 'testy'
     assert request_durations[0]['service_latency']
     assert request_durations[0]['host_latency']
