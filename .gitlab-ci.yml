@@ -1,4 +1,4 @@
-image: registry.gitlab.com/christiantragesser/pypline-ci:fakos
+image: registry.gitlab.com/christiantragesser/fakos:dev
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -17,8 +17,9 @@ test:
   tags:
     - docker
   script:
-    - python3 $CI_PROJECT_DIR/ci.py test
-    - docker tag local/fakos:latest $EXT_NAME:latest
+    - flake8 $CI_PROJECT_DIR/src
+    - pytest $CI_PROJECT_DIR/src
+    - docker build -t $EXT_NAME:latest -f $CI_PROJECT_DIR/src/Dockerfile $CI_PROJECT_DIR/src
     - docker tag $EXT_NAME:latest $EXT_NAME:$CI_COMMIT_SHA
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $EXT_NAME:latest | grep -e "The push refers to" -e latest
