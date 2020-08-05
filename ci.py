@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from pyplineCI import Pipeline
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
-buildPath = dirPath+'/docker/'
+buildPath = dirPath+'/src/'
 pipeline = Pipeline(dockerRegistry='registry.gitlab.com/christiantragesser')
 localTag = 'local/fakos'
 

@@ -11,6 +11,7 @@ hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'name
 
 interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
 
+
 def record_metrics():
     stats = ping.measure_requests()
     for service in stats:
@@ -19,7 +20,7 @@ def record_metrics():
         gService.labels(service['name'], service['namespace']).set(service['service_latency'])
         gHost.labels(service['name'], service['namespace']).set(service['host_latency'])
         gValidCertDays.labels(service['name'], service['namespace']).set(service['validCertDaysRemaining'])
-        
+
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
