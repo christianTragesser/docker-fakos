@@ -2,7 +2,7 @@ image: registry.gitlab.com/christiantragesser/pypline-ci:fakos
 
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
   EXT_NAME: $CI_REGISTRY/christiantragesser/fakos
 
@@ -14,6 +14,8 @@ stages:
 
 test:
   stage: test
+  tags:
+    - docker
   script:
     - python3 $CI_PROJECT_DIR/ci.py test
     - docker tag local/fakos:latest $EXT_NAME:latest
