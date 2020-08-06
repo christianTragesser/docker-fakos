@@ -1,10 +1,8 @@
 from multiprocessing import Pool
+from fakos import ingress, ssl_check, fakos_log
 import requests
-import ingress
-import ssl_check
-import logs
 
-log = logs.logger('ping')
+log = fakos_log.logger('ping')
 
 
 def construct_service_url(data):

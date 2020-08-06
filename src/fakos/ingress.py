@@ -1,15 +1,17 @@
 from kubernetes import client, config
 import os
-import logs
+from fakos import fakos_log
 
-log = logs.logger('ingress')
+log = fakos_log.logger('ingress')
 
 
 def get_kube_credentials():
     tokenFile = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     caFile = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-    scriptDir = (os.path.dirname(os.path.realpath(__file__)))
-    test_config = scriptDir + '/test/sample.config'
+    script_dir = (os.path.dirname(os.path.realpath(__file__)))
+    test_dir = os.path.dirname(script_dir)
+    test_config = test_dir + '/test/sample.config'
+    print(test_config)
 
     if os.path.exists(tokenFile) and os.path.exists(caFile):
         with open(tokenFile, "r") as apiToken:

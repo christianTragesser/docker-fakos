@@ -4,7 +4,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
-  EXT_NAME: $CI_REGISTRY/christiantragesser/fakos
+  EXT_NAME: ${CI_REGISTRY}/christiantragesser/fakos
 
 services:
   - name: docker:stable-dind
@@ -17,10 +17,10 @@ test:
   tags:
     - docker
   script:
-    - flake8 $CI_PROJECT_DIR/src
-    - pytest $CI_PROJECT_DIR/src
-    - docker build -t $EXT_NAME:latest -f $CI_PROJECT_DIR/src/Dockerfile $CI_PROJECT_DIR/src
-    - docker tag $EXT_NAME:latest $EXT_NAME:$CI_COMMIT_SHA
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker push $EXT_NAME:latest | grep -e "The push refers to" -e latest
-    - docker push $EXT_NAME:$CI_COMMIT_SHA | grep -e "The push refers to" -e latest
+    - flake8 ${CI_PROJECT_DIR}/src
+    - pytest --cov=${CI_PROJECT_DIR}/src/fakos ${CI_PROJECT_DIR}/src/test
+    - docker build -t ${EXT_NAME}:latest -f ${CI_PROJECT_DIR}/src/Dockerfile ${CI_PROJECT_DIR}/src
+    - docker tag ${EXT_NAME}:latest ${EXT_NAME}:${CI_COMMIT_SHORT_SHA}
+    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+    - docker push ${EXT_NAME}:latest | grep -e "The push refers to" -e latest
+    - docker push ${EXT_NAME}:${CI_COMMIT_SHORT_SHA} | grep -e "The push refers to" -e latest

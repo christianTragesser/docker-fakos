@@ -3,7 +3,7 @@ import os
 import sys
 from datetime import datetime, timedelta, timezone
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import ssl_check
+from fakos import ssl_check
 
 now = datetime.now(tz=timezone.utc)
 notBefore = (now - timedelta(weeks=8))
@@ -41,7 +41,7 @@ def test_get_not_after_date(mock_create_default_context, mock_create_connection,
 notAfterResponse = notAfter.date()
 
 
-@mock.patch('ssl_check.get_not_after_date', return_value=notAfterResponse)
+@mock.patch('fakos.ssl_check.get_not_after_date', return_value=notAfterResponse)
 def test_cert_days_remain(mock_get_not_after_date):
     # takes in cert notAfter date
     # get today's date

@@ -2,7 +2,7 @@ from unittest import mock
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import main
+from fakos import main
 
 statsData = (
     {
@@ -29,7 +29,7 @@ statsData = (
 )
 
 
-@mock.patch('ping.measure_requests')
+@mock.patch('fakos.ping.measure_requests')
 def test_create_endpoint_dictionaries(mock_measure_data_func):
     # takes in a tuple of request status dicts from ping.py
     # return single dict record containing stats for each test status

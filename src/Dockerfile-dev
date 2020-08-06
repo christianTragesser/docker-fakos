@@ -1,0 +1,14 @@
+FROM python:3-alpine
+
+RUN apk -U add curl gcc musl-dev python3-dev libffi-dev openssl-dev --no-cache && \
+    pip install --upgrade pip --no-cache-dir && \
+    pip install requests prometheus-client \
+    kubernetes python-json-logger pytest flake8 pytest-cov --no-cache-dir
+
+RUN export DL_URL="https://download.docker.com/linux/static/stable/x86_64/docker-19.03.9.tgz" && \
+    mkdir -p /tmp/download && \
+    curl -L $DL_URL | tar -xz -C /tmp/download && \
+    mv /tmp/download/docker/docker /usr/local/bin/ && \
+    rm -rf /tmp/download
+
+CMD ["/bin/sh"]

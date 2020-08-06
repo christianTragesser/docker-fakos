@@ -2,10 +2,9 @@ import os
 import sys
 from unittest import mock
 import kubernetes
-import mock_ingress_data
-from mock_ingress_data import MockItems
+from mock_ingress_data import MockItems, all_namespace_ingress_items
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import ingress
+from fakos import ingress
 
 
 @mock.patch.object(kubernetes.client.ExtensionsV1beta1Api, 'list_ingress_for_all_namespaces', autospec=True)
@@ -13,7 +12,7 @@ def test_get_ingress_for_all_namespaces(mock_ingress_list_call):
     # query k8s API for list of ingress
     # construct data structure of ingress data to work with
     # return tuple of dictionaries containing ingress data
-    test_data = mock_ingress_data.all_namespace_ingress_items
+    test_data = all_namespace_ingress_items
     mock_ingress_list_call.return_value = MockItems()
 
     ingress_list = ingress.get_ingress_list()

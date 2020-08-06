@@ -1,9 +1,9 @@
 import ssl
 import socket
 from datetime import datetime, date
-import logs
+from fakos import fakos_log
 
-log = logs.logger('certs')
+log = fakos_log.logger('certs')
 
 
 def get_not_after_date(site):

@@ -7,12 +7,12 @@ RUN apk -U add gcc musl-dev python3-dev libffi-dev openssl-dev --no-cache && \
     addgroup -S -g 2222 fakos && \
     adduser -S -u 2222 -g fakos fakos
 
-COPY *.py /opt/
+COPY fakos /opt/fakos
 
-RUN chmod 755 /opt/*
+RUN chmod 755 /opt/fakos/*
 
 USER fakos
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python -u /opt/main.py"]
+CMD ["/bin/sh", "-c", "python -u /opt/fakos/main.py"]

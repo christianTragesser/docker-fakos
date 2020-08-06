@@ -1,7 +1,7 @@
 from prometheus_client import start_http_server, Gauge, Histogram
 import time
 import os
-import ping
+from fakos import ping
 
 gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
