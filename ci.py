@@ -19,7 +19,7 @@ def ci(option):
 
 
 def test():
-    testDir = '/tmp/docker/test'
+    testDir = '/tmp/' + buildPath + 'test'
     volumes = {
         dirPath: {'bind': '/tmp', 'mode': 'rw'}
     }
