@@ -11,7 +11,6 @@ def get_kube_credentials():
     script_dir = (os.path.dirname(os.path.realpath(__file__)))
     test_dir = os.path.dirname(script_dir)
     test_config = test_dir + '/test/sample.config'
-    print(test_config)
 
     if os.path.exists(tokenFile) and os.path.exists(caFile):
         with open(tokenFile, "r") as apiToken:
