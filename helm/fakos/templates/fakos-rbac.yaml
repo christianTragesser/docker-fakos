@@ -1,0 +1,79 @@
+{{- if eq .Values.namespace "kube-system" -}}
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.fullname | quote }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.fullname | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.fullname | quote }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
+{{- else }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.fullname | quote }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
+{{ end }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.fullname | quote }}
+  namespace: {{ .Values.namespace | quote }}
