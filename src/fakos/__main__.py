@@ -1,13 +1,13 @@
-from prometheus_client import start_http_server, Gauge, Histogram
-import time
 import os
+from prometheus_client import start_http_server, Gauge, Histogram
+from time import sleep
 from fakos import ping
 
-gService = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
-gHost = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
-gValidCertDays = Gauge('valid_cert_days_remaining', 'valid certificate days remaining(days)', ['service', 'namespace'])
-hService = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
-hHost = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+g_service = Gauge('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
+g_host = Gauge('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
+g_valid_cert_days = Gauge('valid_cert_days_remaining', 'valid certificate days remaining(days)', ['service', 'namespace'])
+h_service = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
+h_host = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 
 interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
 
@@ -15,11 +15,11 @@ interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
 def record_metrics():
     stats = ping.measure_requests()
     for service in stats:
-        hService.labels(service['name'], service['namespace']).observe(service['service_latency'])
-        hHost.labels(service['name'], service['namespace']).observe(service['host_latency'])
-        gService.labels(service['name'], service['namespace']).set(service['service_latency'])
-        gHost.labels(service['name'], service['namespace']).set(service['host_latency'])
-        gValidCertDays.labels(service['name'], service['namespace']).set(service['validCertDaysRemaining'])
+        h_service.labels(service['name'], service['namespace']).observe(service['service_latency'])
+        h_host.labels(service['name'], service['namespace']).observe(service['host_latency'])
+        g_service.labels(service['name'], service['namespace']).set(service['service_latency'])
+        g_host.labels(service['name'], service['namespace']).set(service['host_latency'])
+        g_valid_cert_days.labels(service['name'], service['namespace']).set(service['cert_expire_days'])
 
 
 if __name__ == '__main__':
@@ -29,6 +29,6 @@ if __name__ == '__main__':
     while True:
         try:
             record_metrics()
-            time.sleep(interval)
+            sleep(interval)
         except Exception as e:
             print(e)
