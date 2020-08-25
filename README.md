@@ -22,19 +22,20 @@ Fakós assumes each Ingress endpoint is secured via TLS communications and provi
 
 
 ### Installation
-
-Cluster-wide ingress observation using Helm:
-
+Fakós is available for installation via [Helm package](https://helm.sh/).  
+Add the `ctt` repo to Helm:  
 ```
 helm repo add ctt https://helm.evoen.net
+```  
 
-helm install ctt/fakos --name fakos-metrics
+For cluster-wide ingress observation:  
 ```
+helm install fakos-metrics ctt/fakos --namespace=kube-system
+```  
 
-To restrict Fakós observation to a specific namespace:
-
+To restrict Fakós ingress observation to a specific namespace:  
 ```
-helm install ctt/fakos --name fakos-metrics --set namespace=<desired namespace>
+helm install fakos-metrics ctt/fakos --namespace=<desired namespace>
 ```
 
 You can also reference the [ example values file ](https://github.com/christianTragesser/fakos/blob/master/helm/fakos/values.yaml) for further customization using [ Helm ](https://docs.helm.sh/).
