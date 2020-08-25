@@ -15,4 +15,4 @@ USER fakos
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python -u /opt/fakos/main.py"]
+CMD ["/bin/sh", "-c", "cd /opt && python -m fakos"]
