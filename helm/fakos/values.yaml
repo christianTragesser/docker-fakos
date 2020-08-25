@@ -1,5 +1,4 @@
 fullname: fakos-metrics-exporter
-namespace: kube-system
 prometheusLabelKey: prometheus
 deployment:
   image:
