@@ -38,10 +38,9 @@ To restrict Fakós ingress observation to a specific namespace:
 helm install fakos-metrics ctt/fakos --namespace=<desired namespace>
 ```
 
-
 ### Configure Options
 **Check Interval**  
-By default measurements are taken in 30 minute intervals.  Measurement cadence can be changed by setting the enviromental variable `INTERVAL` in units of minutes.
+By default measurements are taken in 30 minute intervals.  The measurement cadence is adjustable by providing a value for `fakos.interval` in units of minutes.
 ```sh
 # 1 hour interval
 helm upgrade fakos-metrics ctt/fakos --set fakos.interval=60 --namespace=kube-system
