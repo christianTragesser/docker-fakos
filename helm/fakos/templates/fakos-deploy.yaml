@@ -4,20 +4,19 @@ metadata:
   name: {{ .Values.fullname | quote }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
+    {{ .Values.prometheus.labelKey }}: {{ .Values.fullname | quote }}
 spec:
   replicas: 1 
   selector:
     matchLabels:
-      {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
+      {{ .Values.prometheus.labelKey }}: {{ .Values.fullname | quote }}
   template:
     metadata:
       labels:
-        {{ .Values.prometheusLabelKey }}: {{ .Values.fullname | quote }}
+        {{ .Values.prometheus.labelKey }}: {{ .Values.fullname | quote }}
         name: {{ .Values.fullname | quote }}
     spec:
       serviceAccountName: {{ .Values.fullname | quote }}
-      terminationGracePeriodSeconds: 60
       containers:
       - image: {{ .Values.deployment.image.repository | quote }}
         name: fakos
@@ -27,6 +26,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          - name: INTERVAL
+            value: {{ .Values.fakos.interval | quote }} 
         resources:
           requests:
             memory: {{ .Values.deployment.resources.requests.memory | quote }}

@@ -1,5 +1,4 @@
 fullname: fakos-metrics-exporter
-prometheusLabelKey: prometheus
 deployment:
   image:
     repository: registry.gitlab.com/christiantragesser/fakos
@@ -16,3 +15,7 @@ service:
   name: metrics
   type: ClusterIP
   port: 8000
+prometheus:
+  labelKey: prometheus
+fakos:
+  interval: 30
