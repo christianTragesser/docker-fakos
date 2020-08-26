@@ -9,7 +9,8 @@ g_valid_cert_days = Gauge('valid_cert_days_remaining', 'valid certificate days r
 h_service = Histogram('service_latency_seconds', 'service latency(sec)', ['service', 'namespace'])
 h_host = Histogram('host_latency_seconds', 'host latency(sec)', ['service', 'namespace'])
 
-interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 10
+interval = int(os.environ['INTERVAL']) if 'INTERVAL' in os.environ else 30
+interval *= 60
 
 
 def record_metrics():
